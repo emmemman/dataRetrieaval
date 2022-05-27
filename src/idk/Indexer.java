@@ -19,10 +19,10 @@ public class Indexer {
 
     public  Indexer(String indexDirectoryPath) throws IOException {
         Directory indexDirectory = FSDirectory.open(new File(indexDirectoryPath));
-
         writer = new IndexWriter(indexDirectory,
                 new StandardAnalyzer(Version.LUCENE_36),true,
                 IndexWriter.MaxFieldLength.UNLIMITED);
+
 
     }
 
@@ -34,14 +34,17 @@ public class Indexer {
         Document document = new Document();
 
         Field contentField = new Field(LuceneConstants.CONTENTS, new FileReader(file));
-
         Field fileNameField = new Field(LuceneConstants.FILE_NAME, file.getName(),Field.Store.YES,Field.Index.NOT_ANALYZED);
-
         Field filePathField = new Field(LuceneConstants.FILE_PATH, file.getCanonicalPath(), Field.Store.YES, Field.Index.NOT_ANALYZED);
 
         document.add(contentField);
         document.add(fileNameField);
         document.add(filePathField);
+        document.add(new Field(LuceneConstants.SHOW_ID,"",Field.Store.YES,Field.Index.NOT_ANALYZED));
+        document.add(new Field(LuceneConstants.TITLE,"",Field.Store.YES,Field.Index.NOT_ANALYZED));
+        document.add(new Field(LuceneConstants.TYPE,"",Field.Store.YES,Field.Index.NOT_ANALYZED));
+        document.add(new Field(LuceneConstants.RELEASE_YEAR,"",Field.Store.YES,Field.Index.NOT_ANALYZED));
+        document.add(new Field(LuceneConstants.RATING,"",Field.Store.YES,Field.Index.NOT_ANALYZED));
 
         return document;
     }
